@@ -7,9 +7,17 @@ Forked from [Tinkertanker/pxt-rotary-encoder-ky040](https://github.com/tinkertan
 - Supports 1–3 encoders at the same time
 - Removed noisy serial debug messages that interfered with student code
 
+## Todo
+
+- test!
+- add debouncing
+- change right/left to clockwise/counterclockwise
+- submit to makecode
+
 ## Hardware Setup
 
 Connect each encoder's CLK, DT, and SW pins to available digital pins on the micro:bit. GND to GND.
+Rotary Encoders are simple switches, can work on 3.3v.
 
 ## Blocks
 
