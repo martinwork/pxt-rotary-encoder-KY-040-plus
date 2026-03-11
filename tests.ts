@@ -20,10 +20,10 @@ RotaryEncoder.onPressEvent(EncoderID.E1, () => {
     item1 = 5;
     basic.showIcon(IconNames.Heart);
 })
-RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.Right, () => {
+RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.Clockwise, () => {
     item1++;
 })
-RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.Left, () => {
+RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.CounterClockwise, () => {
     item1--;
 })
 
@@ -31,9 +31,9 @@ RotaryEncoder.onPressEvent(EncoderID.E2, () => {
     item2 = 5;
     basic.showIcon(IconNames.SmallHeart);
 })
-RotaryEncoder.onRotateEvent(EncoderID.E2, RotationDirection.Right, () => {
+RotaryEncoder.onRotateEvent(EncoderID.E2, RotationDirection.Clockwise, () => {
     item2++;
 })
-RotaryEncoder.onRotateEvent(EncoderID.E2, RotationDirection.Left, () => {
+RotaryEncoder.onRotateEvent(EncoderID.E2, RotationDirection.CounterClockwise, () => {
     item2--;
 })

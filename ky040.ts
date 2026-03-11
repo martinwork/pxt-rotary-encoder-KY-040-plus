@@ -1,6 +1,6 @@
 enum RotationDirection {
-    Left = 0,
-    Right = 1
+    Clockwise = 0,
+    CounterClockwise = 1
 }
 
 enum EncoderID {
@@ -23,16 +23,16 @@ namespace RotaryEncoder {
         lastPressed: number;
         rotateReady: boolean;
         pressedID: number;
-        rotatedLeftID: number;
-        rotatedRightID: number;
+        rotatedClockwiseID: number;
+        rotatedCounterClockwiseID: number;
 
         constructor(id: EncoderID) {
             this.lastPressed = 1;
             this.rotateReady = true;
             const base = 5600 + (id - 1) * 3;
             this.pressedID = base;
-            this.rotatedLeftID = base + 1;
-            this.rotatedRightID = base + 2;
+            this.rotatedClockwiseID = base + 1;
+            this.rotatedCounterClockwiseID = base + 2;
         }
     }
 
@@ -64,10 +64,10 @@ namespace RotaryEncoder {
                 else if (enc.rotateReady) {
                     if (riValue == 1 && dvValue == 0) {
                         enc.rotateReady = false;
-                        control.raiseEvent(enc.rotatedRightID, RotationDirection.Right);
+                        control.raiseEvent(enc.rotatedCounterClockwiseID, RotationDirection.CounterClockwise);
                     } else if (riValue == 0 && dvValue == 1) {
                         enc.rotateReady = false;
-                        control.raiseEvent(enc.rotatedLeftID, RotationDirection.Left);
+                        control.raiseEvent(enc.rotatedClockwiseID, RotationDirection.Clockwise);
                     }
                 }
                 basic.pause(5);
@@ -93,8 +93,8 @@ namespace RotaryEncoder {
     //% block="on %id rotated |%dir"
     export function onRotateEvent(id: EncoderID, dir: RotationDirection, body: () => void): void {
         const enc = getEncoder(id);
-        if (dir == RotationDirection.Left) control.onEvent(enc.rotatedLeftID, dir, body);
-        if (dir == RotationDirection.Right) control.onEvent(enc.rotatedRightID, dir, body);
+        if (dir == RotationDirection.Clockwise) control.onEvent(enc.rotatedClockwiseID, dir, body);
+        if (dir == RotationDirection.CounterClockwise) control.onEvent(enc.rotatedCounterClockwiseID, dir, body);
     }
 
     /**

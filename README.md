@@ -11,7 +11,7 @@ Forked from [Tinkertanker/pxt-rotary-encoder-ky040](https://github.com/tinkertan
 
 - test!
 - add debouncing
-- change right/left to clockwise/counterclockwise
+- ~~change right/left to counterclockwise/clockwise~~ done
 - submit to makecode
 
 ## Hardware Setup
@@ -35,11 +35,11 @@ RotaryEncoder.init(EncoderID.E1, DigitalPin.P0, DigitalPin.P1, DigitalPin.P2)
 RotaryEncoder.onPressEvent(EncoderID.E1, () => {})
 ```
 
-### On rotate (left/right)
+### On rotate (clockwise/counterclockwise)
 
 ```sig
-RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.Left, () => {})
-RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.Right, () => {})
+RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.CounterClockwise, () => {})
+RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.Clockwise, () => {})
 ```
 
 ## Example: Single encoder number input
@@ -48,11 +48,11 @@ RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.Right, () => {})
 RotaryEncoder.init(EncoderID.E1, DigitalPin.P8, DigitalPin.P9, DigitalPin.P11)
 let item = 0
 basic.showNumber(item)
-RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.Left, () => {
+RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.CounterClockwise, () => {
     item -= 1
     basic.showNumber(item)
 })
-RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.Right, () => {
+RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.Clockwise, () => {
     item += 1
     basic.showNumber(item)
 })
@@ -68,10 +68,10 @@ RotaryEncoder.init(EncoderID.E1, DigitalPin.P8, DigitalPin.P9, DigitalPin.P11)
 RotaryEncoder.init(EncoderID.E2, DigitalPin.P12, DigitalPin.P13, DigitalPin.P14)
 let val1 = 0
 let val2 = 0
-RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.Right, () => { val1++ })
-RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.Left, () => { val1-- })
-RotaryEncoder.onRotateEvent(EncoderID.E2, RotationDirection.Right, () => { val2++ })
-RotaryEncoder.onRotateEvent(EncoderID.E2, RotationDirection.Left, () => { val2-- })
+RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.Clockwise, () => { val1++ })
+RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.CounterClockwise, () => { val1-- })
+RotaryEncoder.onRotateEvent(EncoderID.E2, RotationDirection.Clockwise, () => { val2++ })
+RotaryEncoder.onRotateEvent(EncoderID.E2, RotationDirection.CounterClockwise, () => { val2-- })
 ```
 
 ## Supported targets
