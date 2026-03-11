@@ -6,7 +6,7 @@
   "dependencies": {
     "core": "*"
   },
-  "files": ["ky040.ts", "README.md"],
+  "files": ["ky040.ts", "README.md", "icon.png"],
   "testFiles": ["tests.ts"],
   "public": true,
   "targetVersions": {
