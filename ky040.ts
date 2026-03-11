@@ -140,9 +140,10 @@ namespace RotaryEncoder {
    * See https://github.com/steveturbek/pxt-rotary-encoder-KY-040-multi#recommended-pin-assignments-microbit-v2
    */
   //% blockId=rotary_ky_init_advanced
-  //% block="connect %id clk %clk|dt %dt|sw %sw (any pin)"
+  //% block="connect %id clk %clk|dt %dt|sw %sw "
   //% help=github:steveturbek/pxt-rotary-encoder-KY-040-multi
   //% advanced=true
+  //% clk.defl=DigitalPin.P0 dt.defl=DigitalPin.P1 sw.defl=DigitalPin.P2
   export function initAdvanced(id: EncoderID, clk: DigitalPin, dt: DigitalPin, sw: DigitalPin): void {
     setup(id, clk, dt, sw);
   }
