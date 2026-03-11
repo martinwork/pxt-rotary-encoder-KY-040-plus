@@ -88,6 +88,53 @@ namespace RotaryEncoder {
   }
 
   /**
+   * Connect RotaryEncoder 1: CLK=P0, DT=P1, SW=P2
+   */
+  //% blockId=rotary_ky_init1
+  //% block="connect RotaryEncoder 1  CLK=P0 DT=P1 SW=P2"
+  //% help=github:steveturbek/pxt-rotary-encoder-KY-040-multi
+  //% weight=90
+  export function initE1(): void {
+    setup(EncoderID.E1, DigitalPin.P0, DigitalPin.P1, DigitalPin.P2);
+  }
+
+  /**
+   * Connect RotaryEncoder 2: CLK=P8, DT=P9, SW=P16
+   */
+  //% blockId=rotary_ky_init2
+  //% block="connect RotaryEncoder 2  CLK=P8 DT=P9 SW=P16"
+  //% help=github:steveturbek/pxt-rotary-encoder-KY-040-multi
+  //% weight=80
+  export function initE2(): void {
+    setup(EncoderID.E2, DigitalPin.P8, DigitalPin.P9, DigitalPin.P16);
+  }
+
+  /**
+   * Connect RotaryEncoder 3: CLK=P13, DT=P14, SW=P15
+   */
+  //% blockId=rotary_ky_init3
+  //% block="connect RotaryEncoder 3  CLK=P13 DT=P14 SW=P15"
+  //% help=github:steveturbek/pxt-rotary-encoder-KY-040-multi
+  //% weight=70
+  export function initE3(): void {
+    setup(EncoderID.E3, DigitalPin.P13, DigitalPin.P14, DigitalPin.P15);
+  }
+
+  /**
+   * Run code when the rotary encoder rotates or the button is pressed.
+   */
+  //% blockId=rotary_ky_event
+  //% block="on %id %event"
+  //% help=github:steveturbek/pxt-rotary-encoder-KY-040-multi
+  //% weight=60
+  export function onEvent(id: EncoderID, event: EncoderEvent, body: () => void): void {
+    const enc = getEncoder(id);
+    if (event == EncoderEvent.Clockwise) control.onEvent(enc.rotatedClockwiseID, EncoderEvent.Clockwise, body);
+    if (event == EncoderEvent.CounterClockwise) control.onEvent(enc.rotatedCounterClockwiseID, EncoderEvent.CounterClockwise, body);
+    if (event == EncoderEvent.ButtonPress) control.onEvent(enc.pressedID, 0, body);
+  }
+
+  /**
    * Connect a rotary encoder using any digital pin.
    * Avoid LED pins P3 P4 P6 P7 P10 and accessibility pin P12.
    * See https://github.com/steveturbek/pxt-rotary-encoder-KY-040-multi#recommended-pin-assignments-microbit-v2
@@ -99,47 +146,4 @@ namespace RotaryEncoder {
   export function initAdvanced(id: EncoderID, clk: DigitalPin, dt: DigitalPin, sw: DigitalPin): void {
     setup(id, clk, dt, sw);
   }
-
-  /**
-   * Run code when the rotary encoder rotates or the button is pressed.
-   */
-  //% blockId=rotary_ky_event
-  //% block="on %id %event"
-  //% help=github:steveturbek/pxt-rotary-encoder-KY-040-multi
-  export function onEvent(id: EncoderID, event: EncoderEvent, body: () => void): void {
-    const enc = getEncoder(id);
-    if (event == EncoderEvent.Clockwise) control.onEvent(enc.rotatedClockwiseID, EncoderEvent.Clockwise, body);
-    if (event == EncoderEvent.CounterClockwise) control.onEvent(enc.rotatedCounterClockwiseID, EncoderEvent.CounterClockwise, body);
-    if (event == EncoderEvent.ButtonPress) control.onEvent(enc.pressedID, 0, body);
-  }
-}
-
-/**
- * Connect RotaryEncoder 3: CLK=P13, DT=P14, SW=P15
- */
-//% blockId=rotary_ky_init3
-//% block="connect RotaryEncoder 3  CLK=P13 DT=P14 SW=P15"
-//% help=github:steveturbek/pxt-rotary-encoder-KY-040-multi
-export function initE3(): void {
-  setup(EncoderID.E3, DigitalPin.P13, DigitalPin.P14, DigitalPin.P15);
-}
-
-/**
- * Connect RotaryEncoder 2: CLK=P8, DT=P9, SW=P16
- */
-//% blockId=rotary_ky_init2
-//% block="connect RotaryEncoder 2  CLK=P8 DT=P9 SW=P16"
-//% help=github:steveturbek/pxt-rotary-encoder-KY-040-multi
-export function initE2(): void {
-  setup(EncoderID.E2, DigitalPin.P8, DigitalPin.P9, DigitalPin.P16);
-}
-
-/**
- * Connect RotaryEncoder 1: CLK=P0, DT=P1, SW=P2
- */
-//% blockId=rotary_ky_init1
-//% block="connect RotaryEncoder 1  CLK=P0 DT=P1 SW=P2"
-//% help=github:steveturbek/pxt-rotary-encoder-KY-040-multi
-export function initE1(): void {
-  setup(EncoderID.E1, DigitalPin.P0, DigitalPin.P1, DigitalPin.P2);
 }
