@@ -16,24 +16,24 @@ basic.forever(() => {
     basic.pause(1000);
 })
 
-RotaryEncoder.onPressEvent(EncoderID.E1, () => {
+RotaryEncoder.onEvent(EncoderID.E1, EncoderEvent.ButtonPress, () => {
     item1 = 5;
     basic.showIcon(IconNames.Heart);
 })
-RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.Clockwise, () => {
+RotaryEncoder.onEvent(EncoderID.E1, EncoderEvent.Clockwise, () => {
     item1++;
 })
-RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.CounterClockwise, () => {
+RotaryEncoder.onEvent(EncoderID.E1, EncoderEvent.CounterClockwise, () => {
     item1--;
 })
 
-RotaryEncoder.onPressEvent(EncoderID.E2, () => {
+RotaryEncoder.onEvent(EncoderID.E2, EncoderEvent.ButtonPress, () => {
     item2 = 5;
     basic.showIcon(IconNames.SmallHeart);
 })
-RotaryEncoder.onRotateEvent(EncoderID.E2, RotationDirection.Clockwise, () => {
+RotaryEncoder.onEvent(EncoderID.E2, EncoderEvent.Clockwise, () => {
     item2++;
 })
-RotaryEncoder.onRotateEvent(EncoderID.E2, RotationDirection.CounterClockwise, () => {
+RotaryEncoder.onEvent(EncoderID.E2, EncoderEvent.CounterClockwise, () => {
     item2--;
 })

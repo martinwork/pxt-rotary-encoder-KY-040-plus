@@ -1,14 +1,18 @@
-enum RotationDirection {
+enum EncoderEvent {
+    //% block="clockwise"
     Clockwise = 0,
-    CounterClockwise = 1
+    //% block="counter clockwise"
+    CounterClockwise = 1,
+    //% block="button pressed"
+    ButtonPress = 2
 }
 
 enum EncoderID {
-    //% block="encoder 1"
+    //% block="RotaryEncoder 1"
     E1 = 1,
-    //% block="encoder 2"
+    //% block="RotaryEncoder 2"
     E2 = 2,
-    //% block="encoder 3"
+    //% block="RotaryEncoder 3"
     E3 = 3
 }
 
@@ -64,10 +68,10 @@ namespace RotaryEncoder {
                 else if (enc.rotateReady) {
                     if (riValue == 1 && dvValue == 0) {
                         enc.rotateReady = false;
-                        control.raiseEvent(enc.rotatedCounterClockwiseID, RotationDirection.CounterClockwise);
+                        control.raiseEvent(enc.rotatedCounterClockwiseID, EncoderEvent.CounterClockwise);
                     } else if (riValue == 0 && dvValue == 1) {
                         enc.rotateReady = false;
-                        control.raiseEvent(enc.rotatedClockwiseID, RotationDirection.Clockwise);
+                        control.raiseEvent(enc.rotatedClockwiseID, EncoderEvent.Clockwise);
                     }
                 }
                 basic.pause(5);
@@ -87,23 +91,14 @@ namespace RotaryEncoder {
     }
 
     /**
-     * Run code when the rotary encoder is rotated.
+     * Run code when the rotary encoder rotates or the button is pressed.
      */
-    //% blockId=rotary_ky_rotated_event
-    //% block="on %id rotated |%dir"
-    export function onRotateEvent(id: EncoderID, dir: RotationDirection, body: () => void): void {
+    //% blockId=rotary_ky_event
+    //% block="on %id %event"
+    export function onEvent(id: EncoderID, event: EncoderEvent, body: () => void): void {
         const enc = getEncoder(id);
-        if (dir == RotationDirection.Clockwise) control.onEvent(enc.rotatedClockwiseID, dir, body);
-        if (dir == RotationDirection.CounterClockwise) control.onEvent(enc.rotatedCounterClockwiseID, dir, body);
-    }
-
-    /**
-     * Run code when the rotary encoder button is pressed.
-     */
-    //% blockId=rotary_ky_pressed_event
-    //% block="on %id button pressed"
-    export function onPressEvent(id: EncoderID, body: () => void): void {
-        const enc = getEncoder(id);
-        control.onEvent(enc.pressedID, 0, body);
+        if (event == EncoderEvent.Clockwise) control.onEvent(enc.rotatedClockwiseID, EncoderEvent.Clockwise, body);
+        if (event == EncoderEvent.CounterClockwise) control.onEvent(enc.rotatedCounterClockwiseID, EncoderEvent.CounterClockwise, body);
+        if (event == EncoderEvent.ButtonPress) control.onEvent(enc.pressedID, 0, body);
     }
 }

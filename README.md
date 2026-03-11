@@ -29,17 +29,12 @@ Must be called before any other blocks. Repeat for each encoder you use.
 RotaryEncoder.init(EncoderID.E1, DigitalPin.P0, DigitalPin.P1, DigitalPin.P2)
 ```
 
-### On button pressed
+### On event (rotate or button press)
 
 ```sig
-RotaryEncoder.onPressEvent(EncoderID.E1, () => {})
-```
-
-### On rotate (clockwise/counterclockwise)
-
-```sig
-RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.CounterClockwise, () => {})
-RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.Clockwise, () => {})
+RotaryEncoder.onEvent(EncoderID.E1, EncoderEvent.Clockwise, () => {})
+RotaryEncoder.onEvent(EncoderID.E1, EncoderEvent.CounterClockwise, () => {})
+RotaryEncoder.onEvent(EncoderID.E1, EncoderEvent.ButtonPress, () => {})
 ```
 
 ## Example: Single encoder number input
@@ -48,15 +43,15 @@ RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.Clockwise, () => {})
 RotaryEncoder.init(EncoderID.E1, DigitalPin.P8, DigitalPin.P9, DigitalPin.P11)
 let item = 0
 basic.showNumber(item)
-RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.CounterClockwise, () => {
+RotaryEncoder.onEvent(EncoderID.E1, EncoderEvent.CounterClockwise, () => {
     item -= 1
     basic.showNumber(item)
 })
-RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.Clockwise, () => {
+RotaryEncoder.onEvent(EncoderID.E1, EncoderEvent.Clockwise, () => {
     item += 1
     basic.showNumber(item)
 })
-RotaryEncoder.onPressEvent(EncoderID.E1, () => {
+RotaryEncoder.onEvent(EncoderID.E1, EncoderEvent.ButtonPress, () => {
     basic.showString("selected!")
 })
 ```
@@ -68,10 +63,10 @@ RotaryEncoder.init(EncoderID.E1, DigitalPin.P8, DigitalPin.P9, DigitalPin.P11)
 RotaryEncoder.init(EncoderID.E2, DigitalPin.P12, DigitalPin.P13, DigitalPin.P14)
 let val1 = 0
 let val2 = 0
-RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.Clockwise, () => { val1++ })
-RotaryEncoder.onRotateEvent(EncoderID.E1, RotationDirection.CounterClockwise, () => { val1-- })
-RotaryEncoder.onRotateEvent(EncoderID.E2, RotationDirection.Clockwise, () => { val2++ })
-RotaryEncoder.onRotateEvent(EncoderID.E2, RotationDirection.CounterClockwise, () => { val2-- })
+RotaryEncoder.onEvent(EncoderID.E1, EncoderEvent.Clockwise, () => { val1++ })
+RotaryEncoder.onEvent(EncoderID.E1, EncoderEvent.CounterClockwise, () => { val1-- })
+RotaryEncoder.onEvent(EncoderID.E2, EncoderEvent.Clockwise, () => { val2++ })
+RotaryEncoder.onEvent(EncoderID.E2, EncoderEvent.CounterClockwise, () => { val2-- })
 ```
 
 ## Supported targets
