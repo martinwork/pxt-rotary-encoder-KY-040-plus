@@ -18,7 +18,7 @@ enum EncoderID {
 
 //% color=50 weight=80
 //% icon="\uf01e"
-namespace RotaryEncoder {
+namespace RotaryEncoderPlus {
   class EncoderState {
     clkPin: number;
     dtPin: number;
