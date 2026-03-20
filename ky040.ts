@@ -148,7 +148,7 @@ namespace RotaryEncoderPlus {
   //% blockId=rotary_ky_init_advanced
   //% block="connect %id clk %clk|dt %dt|sw %sw|active high %activeHigh"
   //% help=github:steveturbek/pxt-rotary-encoder-KY-040-multi
-  //% advanced=true
+  //% advanced=false
   //% clk.defl=DigitalPin.P0 dt.defl=DigitalPin.P1 sw.defl=DigitalPin.P2 activeHigh.defl=false
   export function initAdvanced(id: EncoderID, clk: DigitalPin, dt: DigitalPin, sw: DigitalPin, activeHigh: boolean = false): void {
     setup(id, clk, dt, sw, activeHigh);
