@@ -1,3 +1,5 @@
+// @ts-nocheck  // hide microbit specific code errors when developing in VS Code
+
 enum EncoderEvent {
   //% block="clockwise"
   Clockwise = 0,
@@ -23,6 +25,7 @@ namespace RotaryEncoderPlus {
     clkPin: number;
     dtPin: number;
     swPin: number;
+    activeHigh: boolean;
     lastPressed: number;
     rotateReady: boolean;
     pressedID: number;
@@ -30,6 +33,7 @@ namespace RotaryEncoderPlus {
     rotatedCounterClockwiseID: number;
 
     constructor(id: EncoderID) {
+      this.activeHigh = false;
       this.lastPressed = 1;
       this.rotateReady = true;
       const base = 5600 + (id - 1) * 3;
@@ -47,15 +51,17 @@ namespace RotaryEncoderPlus {
     return encoders[idx];
   }
 
-  function setup(id: EncoderID, clk: number, dt: number, sw: number): void {
+  function setup(id: EncoderID, clk: number, dt: number, sw: number, activeHigh: boolean = false): void {
     const enc = getEncoder(id);
     enc.clkPin = clk;
     enc.dtPin = dt;
     enc.swPin = sw;
+    enc.activeHigh = activeHigh;
+    enc.lastPressed = activeHigh ? 0 : 1;
 
     pins.setPull(clk as DigitalPin, PinPullMode.PullUp);
     pins.setPull(dt as DigitalPin, PinPullMode.PullUp);
-    pins.setPull(sw as DigitalPin, PinPullMode.PullUp);
+    pins.setPull(sw as DigitalPin, activeHigh ? PinPullMode.PullDown : PinPullMode.PullUp);
 
     control.inBackground(() => {
       while (true) {
@@ -80,7 +86,7 @@ namespace RotaryEncoderPlus {
         const pressed = pins.digitalReadPin(enc.swPin as DigitalPin);
         if (pressed != enc.lastPressed) {
           enc.lastPressed = pressed;
-          if (pressed == 0) control.raiseEvent(enc.pressedID, 0);
+          if (pressed == (enc.activeHigh ? 1 : 0)) control.raiseEvent(enc.pressedID, 0);
         }
         basic.pause(50);
       }
@@ -140,11 +146,11 @@ namespace RotaryEncoderPlus {
    * See https://github.com/steveturbek/pxt-rotary-encoder-KY-040-multi#recommended-pin-assignments-microbit-v2
    */
   //% blockId=rotary_ky_init_advanced
-  //% block="connect %id clk %clk|dt %dt|sw %sw "
+  //% block="connect %id clk %clk|dt %dt|sw %sw|active high %activeHigh"
   //% help=github:steveturbek/pxt-rotary-encoder-KY-040-multi
   //% advanced=true
-  //% clk.defl=DigitalPin.P0 dt.defl=DigitalPin.P1 sw.defl=DigitalPin.P2
-  export function initAdvanced(id: EncoderID, clk: DigitalPin, dt: DigitalPin, sw: DigitalPin): void {
-    setup(id, clk, dt, sw);
+  //% clk.defl=DigitalPin.P0 dt.defl=DigitalPin.P1 sw.defl=DigitalPin.P2 activeHigh.defl=false
+  export function initAdvanced(id: EncoderID, clk: DigitalPin, dt: DigitalPin, sw: DigitalPin, activeHigh: boolean = false): void {
+    setup(id, clk, dt, sw, activeHigh);
   }
 }

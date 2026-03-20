@@ -13,7 +13,8 @@ This is a MakeCode extension for the KY-040 rotary encoder, supporting up to 3 e
 
 - ~~change right/left to clockwise/counterclockwise~~ done
 - ~~combine rotate and button press into one block~~ done
-- add debouncing
+- ~~add debouncing~~
+- ~~Add activeHigh param to initAdvanced to support active-high (pull-down) switches like the RGB rotary encoder button~~
 - test!
 - submit to makecode
 
