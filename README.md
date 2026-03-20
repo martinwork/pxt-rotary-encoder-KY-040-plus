@@ -1,12 +1,12 @@
-# KY-040 Rotary Encoder MakeCode Package
+# KY-040 Rotary Encoder Plus — MakeCode Extension
 
-This is a MakeCode extension for the KY-040 rotary encoder, supporting up to 3 encoders simultaneously.
+MakeCode extension for the KY-040 rotary encoder and compatible rotary encoders, supporting up to 3 encoders simultaneously.
 
 - Supports 1–3 encoders at the same time
-- Supports bare KY-040 component without PCB (uses internal microbit pull ups)
+- Supports bare KY-040 component without PCB (uses internal micro:bit pull-ups)
 - Added debouncing to avoid common errors with low quality KY-040 parts
-- Added basic usage connect blocks to avoid pins with other jobs, like LED, which can confuse new users
-- Advanced option is in ... more menu, with all pins
+- Simple connect blocks for common pin layouts; advanced block lets you choose any pin
+- Supports active-high switches (e.g. RGB rotary encoder button) via the `switchType` parameter
 - Removed noisy serial debug messages that interfered with student code
 
 ## Hardware Setup
@@ -28,22 +28,33 @@ Avoid P3, P4, P6, P7, P10 — these are shared with the LED matrix and will conf
 
 ## Blocks
 
-### Connect rotary encoder
+### Connect rotary encoder (preset pins)
 
 Must be called before any other blocks. Repeat for each encoder you use.
 
 ```sig
-RotaryEncoder.initE1()
-RotaryEncoder.initE2()
-RotaryEncoder.initE3()
+RotaryEncoderPlus.initE1()
+RotaryEncoderPlus.initE2()
+RotaryEncoderPlus.initE3()
 ```
+
+### Connect rotary encoder (custom pins)
+
+Use when you need to choose your own pins, or for active-high switches like the RGB rotary encoder.
+
+```sig
+RotaryEncoderPlus.initAdvanced(EncoderID.E1, DigitalPin.P0, DigitalPin.P1, DigitalPin.P2, SwitchType.Standard)
+```
+
+`SwitchType.Standard` — button connects to GND when pressed (KY-040 and most encoders, default)
+`SwitchType.ActiveHigh` — button connects to 3.3V when pressed (e.g. RGB rotary encoder)
 
 ### On event (rotate or button press)
 
 ```sig
-RotaryEncoder.onEvent(EncoderID.E1, EncoderEvent.Clockwise, () => {})
-RotaryEncoder.onEvent(EncoderID.E1, EncoderEvent.CounterClockwise, () => {})
-RotaryEncoder.onEvent(EncoderID.E1, EncoderEvent.ButtonPress, () => {})
+RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.Clockwise, () => {})
+RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.CounterClockwise, () => {})
+RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.ButtonPress, () => {})
 ```
 
 ## Example: Single encoder number input
@@ -51,21 +62,21 @@ RotaryEncoder.onEvent(EncoderID.E1, EncoderEvent.ButtonPress, () => {})
 ```blocks
 basic.pause(1000); // --- Setup ---
 basic.showIcon(IconNames.Chessboard);
-RotaryEncoder.initE1()
+RotaryEncoderPlus.initE1()
 let count = 13;
 led.plotBarGraph(count, 25);
 
-RotaryEncoder.onEvent(EncoderID.E1, EncoderEvent.CounterClockwise, () => {
+RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.CounterClockwise, () => {
     count -= 1
   serial.writeValue("count", count);
   led.plotBarGraph(count, 25);
 })
-RotaryEncoder.onEvent(EncoderID.E1, EncoderEvent.Clockwise, () => {
+RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.Clockwise, () => {
     count += 1
     serial.writeValue("count", count);
     basic.showNumber(count);
 })
-RotaryEncoder.onEvent(EncoderID.E1, EncoderEvent.ButtonPress, () => {
+RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.ButtonPress, () => {
     basic.showIcon(IconNames.Yes);
     basic.pause(1000);
     led.plotBarGraph(count, 25);
@@ -75,45 +86,45 @@ RotaryEncoder.onEvent(EncoderID.E1, EncoderEvent.ButtonPress, () => {
 ## Example: Three Encoders
 
 ```blocks
-RotaryEncoder.onEvent(EncoderID.E1, EncoderEvent.CounterClockwise, function () {
+RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.CounterClockwise, function () {
     basic.showNumber(1)
     basic.showArrow(ArrowNames.West)
 })
-RotaryEncoder.onEvent(EncoderID.E3, EncoderEvent.CounterClockwise, function () {
+RotaryEncoderPlus.onEvent(EncoderID.E3, EncoderEvent.CounterClockwise, function () {
     basic.showNumber(3)
     basic.showArrow(ArrowNames.West)
 })
-RotaryEncoder.onEvent(EncoderID.E2, EncoderEvent.Clockwise, function () {
+RotaryEncoderPlus.onEvent(EncoderID.E2, EncoderEvent.Clockwise, function () {
     basic.showNumber(2)
     basic.showArrow(ArrowNames.East)
 })
-RotaryEncoder.onEvent(EncoderID.E2, EncoderEvent.CounterClockwise, function () {
+RotaryEncoderPlus.onEvent(EncoderID.E2, EncoderEvent.CounterClockwise, function () {
     basic.showNumber(2)
     basic.showArrow(ArrowNames.West)
 })
-RotaryEncoder.onEvent(EncoderID.E3, EncoderEvent.Clockwise, function () {
+RotaryEncoderPlus.onEvent(EncoderID.E3, EncoderEvent.Clockwise, function () {
     basic.showNumber(3)
     basic.showArrow(ArrowNames.East)
 })
-RotaryEncoder.onEvent(EncoderID.E2, EncoderEvent.ButtonPress, function () {
+RotaryEncoderPlus.onEvent(EncoderID.E2, EncoderEvent.ButtonPress, function () {
     basic.showNumber(2)
     basic.showArrow(ArrowNames.South)
 })
-RotaryEncoder.onEvent(EncoderID.E1, EncoderEvent.ButtonPress, function () {
+RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.ButtonPress, function () {
     basic.showNumber(1)
     basic.showArrow(ArrowNames.South)
 })
-RotaryEncoder.onEvent(EncoderID.E1, EncoderEvent.Clockwise, function () {
+RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.Clockwise, function () {
     basic.showNumber(1)
     basic.showArrow(ArrowNames.East)
 })
-RotaryEncoder.onEvent(EncoderID.E3, EncoderEvent.ButtonPress, function () {
+RotaryEncoderPlus.onEvent(EncoderID.E3, EncoderEvent.ButtonPress, function () {
     basic.showNumber(3)
     basic.showArrow(ArrowNames.South)
 })
-RotaryEncoder.initE1()
-RotaryEncoder.initE2()
-RotaryEncoder.initE3()
+RotaryEncoderPlus.initE1()
+RotaryEncoderPlus.initE2()
+RotaryEncoderPlus.initE3()
 
 ```
 

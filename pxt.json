@@ -1,7 +1,7 @@
 {
   "name": "KY-040-Rotary-Encoder-Plus",
   "version": "0.5.0",
-  "description": "MakeCode extension for KY-040 rotary encoder, with debouncing, supporting up to 3 encoders simultaneously",
+  "description": "MakeCode extension for KY-040 and compatible rotary encoders. Supports up to 3 encoders, debouncing, and active-high switches (e.g. RGB rotary encoder button).",
   "license": "MIT",
   "dependencies": {
     "core": "*"
