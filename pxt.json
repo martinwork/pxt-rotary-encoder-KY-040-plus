@@ -1,12 +1,12 @@
 {
-  "name": "KY-040-Rotary-Encoder-Plus",
-  "version": "0.5.0",
-  "description": "MakeCode extension for KY-040 and compatible rotary encoders. Supports up to 3 encoders, debouncing, and active-high switches (e.g. RGB rotary encoder button).",
+  "name": "ky040-rotary-encoder-plus",
+  "version": "0.6.0",
+  "description": "KY-040 rotary encoder extension for micro:bit. Up to 3 encoders, debounced, active-high switch support.",
   "license": "MIT",
   "dependencies": {
     "core": "*"
   },
-  "files": ["ky040.ts", "README.md", "icon.png"],
+  "files": ["ky040.ts", "README.md"],
   "testFiles": ["tests.ts"],
   "public": true,
   "targetVersions": {

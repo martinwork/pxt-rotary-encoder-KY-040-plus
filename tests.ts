@@ -7,8 +7,8 @@
 let item1 = 5;
 let item2 = 5;
 
-RotaryEncoderPlus.initE1();
-RotaryEncoderPlus.initAdvanced(EncoderID.E2, DigitalPin.P8, DigitalPin.P9, DigitalPin.P13, SwitchType.ActiveHigh);
+rotaryEncoderPlus.connectEncoder1();
+rotaryEncoderPlus.connectAdvanced(rotaryEncoderPlus.EncoderID.E2, DigitalPin.P8, DigitalPin.P9, DigitalPin.P13, rotaryEncoderPlus.SwitchType.ActiveHigh);
 
 basic.forever(() => {
     basic.showNumber(item1);
@@ -17,24 +17,24 @@ basic.forever(() => {
     basic.pause(1000);
 })
 
-RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.ButtonPress, () => {
+rotaryEncoderPlus.onEvent(rotaryEncoderPlus.EncoderID.E1, rotaryEncoderPlus.EncoderEvent.ButtonPress, () => {
     item1 = 5;
     basic.showIcon(IconNames.Heart);
 })
-RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.Clockwise, () => {
+rotaryEncoderPlus.onEvent(rotaryEncoderPlus.EncoderID.E1, rotaryEncoderPlus.EncoderEvent.Clockwise, () => {
     item1++;
 })
-RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.CounterClockwise, () => {
+rotaryEncoderPlus.onEvent(rotaryEncoderPlus.EncoderID.E1, rotaryEncoderPlus.EncoderEvent.CounterClockwise, () => {
     item1--;
 })
 
-RotaryEncoderPlus.onEvent(EncoderID.E2, EncoderEvent.ButtonPress, () => {
+rotaryEncoderPlus.onEvent(rotaryEncoderPlus.EncoderID.E2, rotaryEncoderPlus.EncoderEvent.ButtonPress, () => {
     item2 = 5;
     basic.showIcon(IconNames.SmallHeart);
 })
-RotaryEncoderPlus.onEvent(EncoderID.E2, EncoderEvent.Clockwise, () => {
+rotaryEncoderPlus.onEvent(rotaryEncoderPlus.EncoderID.E2, rotaryEncoderPlus.EncoderEvent.Clockwise, () => {
     item2++;
 })
-RotaryEncoderPlus.onEvent(EncoderID.E2, EncoderEvent.CounterClockwise, () => {
+rotaryEncoderPlus.onEvent(rotaryEncoderPlus.EncoderID.E2, rotaryEncoderPlus.EncoderEvent.CounterClockwise, () => {
     item2--;
 })

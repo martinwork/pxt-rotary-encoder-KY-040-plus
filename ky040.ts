@@ -1,41 +1,44 @@
 // @ts-nocheck  // hide microbit specific code errors when developing in VS Code
 
-// Events that a rotary encoder can fire
-enum EncoderEvent {
-  //% block="clockwise"
-  Clockwise = 0,
-  //% block="counter clockwise"
-  CounterClockwise = 1,
-  //% block="button pressed"
-  ButtonPress = 2,
-}
-
-// Switch wiring type — most encoders are Standard (active-low, pull-up)
-enum SwitchType {
-  //% block="standard"
-  Standard = 0,   // button connects to GND when pressed (KY-040 and most encoders)
-  //% block="active high"
-  ActiveHigh = 1, // button connects to 3.3V when pressed (e.g. RGB rotary encoder)
-}
-
-// Which physical encoder we're referring to (supports up to 3)
-enum EncoderID {
-  //% block="RotaryEncoder 1"
-  E1 = 1,
-  //% block="RotaryEncoder 2"
-  E2 = 2,
-  //% block="RotaryEncoder 3"
-  E3 = 3,
-}
-
 //% color=50 weight=80
 //% icon="\uf01e"
-namespace RotaryEncoderPlus {
+//% block="Rotary Encoder"
+//% tooltip="Blocks for KY-040 and compatible rotary encoders. Supports up to 3 encoders."
+namespace rotaryEncoderPlus {
+
+  // Events that a rotary encoder can fire
+  export enum EncoderEvent {
+    //% block="clockwise"
+    Clockwise = 0,
+    //% block="counter clockwise"
+    CounterClockwise = 1,
+    //% block="button pressed"
+    ButtonPress = 2,
+  }
+
+  // Switch wiring type — most encoders are Standard (active-low, pull-up)
+  export enum SwitchType {
+    //% block="standard"
+    Standard = 0,   // button connects to GND when pressed (KY-040 and most encoders)
+    //% block="active high"
+    ActiveHigh = 1, // button connects to 3.3V when pressed (e.g. RGB rotary encoder)
+  }
+
+  // Which physical encoder we're referring to (supports up to 3)
+  export enum EncoderID {
+    //% block="rotary encoder 1"
+    E1 = 1,
+    //% block="rotary encoder 2"
+    E2 = 2,
+    //% block="rotary encoder 3"
+    E3 = 3,
+  }
+
   // Holds all runtime state for one encoder instance
   class EncoderState {
     clkPin: number; // CLK pin — the primary rotation signal
-    dtPin: number; // DT pin — direction signal, read when CLK changes
-    swPin: number; // SW pin — the push-button switch
+    dtPin: number;  // DT pin — direction signal, read when CLK changes
+    swPin: number;  // SW pin — the push-button switch
 
     // Whether the switch is standard (active-low) or active-high — determines pull mode and press level
     switchType: SwitchType;
@@ -48,6 +51,9 @@ namespace RotaryEncoderPlus {
     // Prevents firing multiple events during a single detent transition.
     rotateReady: boolean;
 
+    // true after setup() has launched background loops — prevents duplicate loops if called again.
+    initialized: boolean;
+
     // Unique event IDs used with control.raiseEvent / control.onEvent.
     // Each encoder gets 3 consecutive IDs starting at 5600 + (id-1)*3.
     pressedID: number;
@@ -58,6 +64,7 @@ namespace RotaryEncoderPlus {
       this.switchType = SwitchType.Standard;
       this.lastPressed = 1; // will be overridden by setup() based on switchType
       this.rotateReady = true;
+      this.initialized = false;
       // Assign unique event IDs for this encoder so multiple encoders don't collide
       const base = 5600 + (id - 1) * 3;
       this.pressedID = base;
@@ -76,7 +83,8 @@ namespace RotaryEncoderPlus {
     return encoders[idx];
   }
 
-  // Core setup: configures pins and starts two background polling loops
+  // Core setup: configures pins and starts two background polling loops.
+  // Safe to call multiple times — background loops are only created once per encoder.
   function setup(id: EncoderID, clk: number, dt: number, sw: number, switchType: SwitchType = SwitchType.Standard): void {
     const enc = getEncoder(id);
     enc.clkPin = clk;
@@ -95,6 +103,9 @@ namespace RotaryEncoderPlus {
     //   Standard   → PullUp  (idles HIGH, LOW when pressed)
     //   ActiveHigh → PullDown (idles LOW, HIGH when pressed)
     pins.setPull(sw as DigitalPin, switchType == SwitchType.ActiveHigh ? PinPullMode.PullDown : PinPullMode.PullUp);
+
+    if (enc.initialized) return; // prevent duplicate background loops if called more than once
+    enc.initialized = true;
 
     // --- Background loop 1: rotation detection ---
     // Polls CLK and DT every 5ms to detect rotation direction.
@@ -139,35 +150,32 @@ namespace RotaryEncoderPlus {
   }
 
   /**
-   * Connect RotaryEncoder 1 using default pins: CLK=P0, DT=P1, SW=P2.
+   * Connect rotary encoder 1 using default pins: CLK=P0, DT=P1, SW=P2.
    */
-  //% blockId=rotary_ky_init1
-  //% block="connect RotaryEncoder 1  CLK=P0 DT=P1 SW=P2"
-  //% help=github:steveturbek/pxt-rotary-encoder-KY-040-plus
+  //% blockId=rotary_ky_connect1
+  //% block="connect rotary encoder 1 CLK=P0 DT=P1 SW=P2"
   //% weight=90
-  export function initE1(): void {
+  export function connectEncoder1(): void {
     setup(EncoderID.E1, DigitalPin.P0, DigitalPin.P1, DigitalPin.P2);
   }
 
   /**
-   * Connect RotaryEncoder 2 using default pins: CLK=P8, DT=P9, SW=P13.
+   * Connect rotary encoder 2 using default pins: CLK=P8, DT=P9, SW=P13.
    */
-  //% blockId=rotary_ky_init2
-  //% block="connect RotaryEncoder 2  CLK=P8 DT=P9 SW=P13"
-  //% help=github:steveturbek/pxt-rotary-encoder-KY-040-plus
+  //% blockId=rotary_ky_connect2
+  //% block="connect rotary encoder 2 CLK=P8 DT=P9 SW=P13"
   //% weight=80
-  export function initE2(): void {
+  export function connectEncoder2(): void {
     setup(EncoderID.E2, DigitalPin.P8, DigitalPin.P9, DigitalPin.P13);
   }
 
   /**
-   * Connect RotaryEncoder 3 using default pins: CLK=P14, DT=P15, SW=P16.
+   * Connect rotary encoder 3 using default pins: CLK=P14, DT=P15, SW=P16.
    */
-  //% blockId=rotary_ky_init3
-  //% block="connect RotaryEncoder 3  CLK=P14 DT=P15 SW=P16"
-  //% help=github:steveturbek/pxt-rotary-encoder-KY-040-plus
+  //% blockId=rotary_ky_connect3
+  //% block="connect rotary encoder 3 CLK=P14 DT=P15 SW=P16"
   //% weight=70
-  export function initE3(): void {
+  export function connectEncoder3(): void {
     setup(EncoderID.E3, DigitalPin.P14, DigitalPin.P15, DigitalPin.P16);
   }
 
@@ -179,7 +187,6 @@ namespace RotaryEncoderPlus {
    */
   //% blockId=rotary_ky_event
   //% block="on %id %event"
-  //% help=github:steveturbek/pxt-rotary-encoder-KY-040-plus
   //% weight=60
   export function onEvent(id: EncoderID, event: EncoderEvent, body: () => void): void {
     const enc = getEncoder(id);
@@ -190,19 +197,18 @@ namespace RotaryEncoderPlus {
 
   /**
    * Connect a rotary encoder using any available digital pin.
-   * You may need to turn off LEDs to use all pins
+   * You may need to turn off LEDs to use all pins.
    * @param id which encoder slot to use (E1, E2, or E3)
    * @param clk CLK pin on the encoder
    * @param dt DT pin on the encoder
    * @param sw SW (button) pin on the encoder
    * @param switchType Standard (default, connects to GND when pressed) or ActiveHigh (connects to 3.3V when pressed, e.g. RGB rotary encoder)
    */
-  //% blockId=rotary_ky_init_advanced
-  //% block="connect %id clk %clk|dt %dt|sw %sw|switch type %switchType"
-  //% help=github:steveturbek/pxt-rotary-encoder-KY-040-plus
+  //% blockId=rotary_ky_connect_advanced
+  //% block="connect %id CLK %clk|DT %dt|SW %sw|switch type %switchType"
   //% advanced=false
   //% clk.defl=DigitalPin.P0 dt.defl=DigitalPin.P1 sw.defl=DigitalPin.P2 switchType.defl=SwitchType.Standard
-  export function initAdvanced(id: EncoderID, clk: DigitalPin, dt: DigitalPin, sw: DigitalPin, switchType: SwitchType = SwitchType.Standard): void {
+  export function connectAdvanced(id: EncoderID, clk: DigitalPin, dt: DigitalPin, sw: DigitalPin, switchType: SwitchType = SwitchType.Standard): void {
     setup(id, clk, dt, sw, switchType);
   }
 }

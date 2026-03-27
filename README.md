@@ -33,9 +33,9 @@ Avoid P3, P4, P6, P7, P10 — these are shared with the LED matrix and will conf
 Must be called before any other blocks. Repeat for each encoder you use.
 
 ```sig
-RotaryEncoderPlus.initE1()
-RotaryEncoderPlus.initE2()
-RotaryEncoderPlus.initE3()
+rotaryEncoderPlus.connectEncoder1()
+rotaryEncoderPlus.connectEncoder2()
+rotaryEncoderPlus.connectEncoder3()
 ```
 
 ### Connect rotary encoder (custom pins)
@@ -43,18 +43,18 @@ RotaryEncoderPlus.initE3()
 Use when you need to choose your own pins, or for active-high switches like the RGB rotary encoder.
 
 ```sig
-RotaryEncoderPlus.initAdvanced(EncoderID.E1, DigitalPin.P0, DigitalPin.P1, DigitalPin.P2, SwitchType.Standard)
+rotaryEncoderPlus.connectAdvanced(rotaryEncoderPlus.EncoderID.E1, DigitalPin.P0, DigitalPin.P1, DigitalPin.P2, rotaryEncoderPlus.SwitchType.Standard)
 ```
 
-`SwitchType.Standard` — button connects to GND when pressed (KY-040 and most encoders, default)
-`SwitchType.ActiveHigh` — button connects to 3.3V when pressed (e.g. RGB rotary encoder)
+`rotaryEncoderPlus.SwitchType.Standard` — button connects to GND when pressed (KY-040 and most encoders, default)
+`rotaryEncoderPlus.SwitchType.ActiveHigh` — button connects to 3.3V when pressed (e.g. RGB rotary encoder)
 
 ### On event (rotate or button press)
 
 ```sig
-RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.Clockwise, () => {})
-RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.CounterClockwise, () => {})
-RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.ButtonPress, () => {})
+rotaryEncoderPlus.onEvent(rotaryEncoderPlus.EncoderID.E1, rotaryEncoderPlus.EncoderEvent.Clockwise, () => {})
+rotaryEncoderPlus.onEvent(rotaryEncoderPlus.EncoderID.E1, rotaryEncoderPlus.EncoderEvent.CounterClockwise, () => {})
+rotaryEncoderPlus.onEvent(rotaryEncoderPlus.EncoderID.E1, rotaryEncoderPlus.EncoderEvent.ButtonPress, () => {})
 ```
 
 ## Example: Single encoder number input
@@ -62,21 +62,21 @@ RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.ButtonPress, () => {})
 ```blocks
 basic.pause(1000); // --- Setup ---
 basic.showIcon(IconNames.Chessboard);
-RotaryEncoderPlus.initE1()
+rotaryEncoderPlus.connectEncoder1()
 let count = 13;
 led.plotBarGraph(count, 25);
 
-RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.CounterClockwise, () => {
+rotaryEncoderPlus.onEvent(rotaryEncoderPlus.EncoderID.E1, rotaryEncoderPlus.EncoderEvent.CounterClockwise, () => {
     count -= 1
-  serial.writeValue("count", count);
-  led.plotBarGraph(count, 25);
+    serial.writeValue("count", count);
+    led.plotBarGraph(count, 25);
 })
-RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.Clockwise, () => {
+rotaryEncoderPlus.onEvent(rotaryEncoderPlus.EncoderID.E1, rotaryEncoderPlus.EncoderEvent.Clockwise, () => {
     count += 1
     serial.writeValue("count", count);
     basic.showNumber(count);
 })
-RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.ButtonPress, () => {
+rotaryEncoderPlus.onEvent(rotaryEncoderPlus.EncoderID.E1, rotaryEncoderPlus.EncoderEvent.ButtonPress, () => {
     basic.showIcon(IconNames.Yes);
     basic.pause(1000);
     led.plotBarGraph(count, 25);
@@ -86,51 +86,51 @@ RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.ButtonPress, () => {
 ## Example: Three Encoders
 
 ```blocks
-RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.CounterClockwise, function () {
+rotaryEncoderPlus.onEvent(rotaryEncoderPlus.EncoderID.E1, rotaryEncoderPlus.EncoderEvent.CounterClockwise, function () {
     basic.showNumber(1)
     basic.showArrow(ArrowNames.West)
 })
-RotaryEncoderPlus.onEvent(EncoderID.E3, EncoderEvent.CounterClockwise, function () {
+rotaryEncoderPlus.onEvent(rotaryEncoderPlus.EncoderID.E3, rotaryEncoderPlus.EncoderEvent.CounterClockwise, function () {
     basic.showNumber(3)
     basic.showArrow(ArrowNames.West)
 })
-RotaryEncoderPlus.onEvent(EncoderID.E2, EncoderEvent.Clockwise, function () {
+rotaryEncoderPlus.onEvent(rotaryEncoderPlus.EncoderID.E2, rotaryEncoderPlus.EncoderEvent.Clockwise, function () {
     basic.showNumber(2)
     basic.showArrow(ArrowNames.East)
 })
-RotaryEncoderPlus.onEvent(EncoderID.E2, EncoderEvent.CounterClockwise, function () {
+rotaryEncoderPlus.onEvent(rotaryEncoderPlus.EncoderID.E2, rotaryEncoderPlus.EncoderEvent.CounterClockwise, function () {
     basic.showNumber(2)
     basic.showArrow(ArrowNames.West)
 })
-RotaryEncoderPlus.onEvent(EncoderID.E3, EncoderEvent.Clockwise, function () {
+rotaryEncoderPlus.onEvent(rotaryEncoderPlus.EncoderID.E3, rotaryEncoderPlus.EncoderEvent.Clockwise, function () {
     basic.showNumber(3)
     basic.showArrow(ArrowNames.East)
 })
-RotaryEncoderPlus.onEvent(EncoderID.E2, EncoderEvent.ButtonPress, function () {
+rotaryEncoderPlus.onEvent(rotaryEncoderPlus.EncoderID.E2, rotaryEncoderPlus.EncoderEvent.ButtonPress, function () {
     basic.showNumber(2)
     basic.showArrow(ArrowNames.South)
 })
-RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.ButtonPress, function () {
+rotaryEncoderPlus.onEvent(rotaryEncoderPlus.EncoderID.E1, rotaryEncoderPlus.EncoderEvent.ButtonPress, function () {
     basic.showNumber(1)
     basic.showArrow(ArrowNames.South)
 })
-RotaryEncoderPlus.onEvent(EncoderID.E1, EncoderEvent.Clockwise, function () {
+rotaryEncoderPlus.onEvent(rotaryEncoderPlus.EncoderID.E1, rotaryEncoderPlus.EncoderEvent.Clockwise, function () {
     basic.showNumber(1)
     basic.showArrow(ArrowNames.East)
 })
-RotaryEncoderPlus.onEvent(EncoderID.E3, EncoderEvent.ButtonPress, function () {
+rotaryEncoderPlus.onEvent(rotaryEncoderPlus.EncoderID.E3, rotaryEncoderPlus.EncoderEvent.ButtonPress, function () {
     basic.showNumber(3)
     basic.showArrow(ArrowNames.South)
 })
-RotaryEncoderPlus.initE1()
-RotaryEncoderPlus.initE2()
-RotaryEncoderPlus.initE3()
+rotaryEncoderPlus.connectEncoder1()
+rotaryEncoderPlus.connectEncoder2()
+rotaryEncoderPlus.connectEncoder3()
 
 ```
 
 ## Acknowledgements
 
-Forked from [Tinkertanker/pxt-rotary-encoder-ky040](https://github.com/tinkertanker/pxt-rotary-encoder-ky040) with the following changes:
+Forked from [Tinkertanker/pxt-rotary-encoder-ky040](https://github.com/tinkertanker/pxt-rotary-encoder-ky040).
 
 ## Supported targets
 
