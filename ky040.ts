@@ -1,6 +1,6 @@
 // @ts-nocheck  // hide microbit specific code errors when developing in VS Code
 
-//% color=50 weight=80
+//% color=#0f9c11 weight=80
 //% icon="\uf01e"
 //% block="Rotary Encoder"
 //% tooltip="Blocks for KY-040 and compatible rotary encoders. Supports up to 3 encoders."
